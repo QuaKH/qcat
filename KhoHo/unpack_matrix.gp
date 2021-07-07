@@ -54,7 +54,10 @@ get_sparse_differential(datapos,i,j) = {
 	i = i2m(datapos, i);
 	j = j2m(datapos, j);
 
-	write("get_sparse_differential_output", allmatr[datapos][i, j]);
+	/*
+		TODO: fix convention; add negatives
+	*/
+	write(Str("sparse_d_",datapos,"_",i,"_",j), allmatr[datapos][i, j]);
 
 	/*
 		for (pos = 1, allmatr_length[datapos][i, j],
