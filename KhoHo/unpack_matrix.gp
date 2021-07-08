@@ -40,24 +40,27 @@ get_differential(datapos, i, j) =
 	return(get_differential_m(datapos, i2m(datapos, i), j2m(datapos, j)))
 }
 
-
-
 /**
- * write differential matrix to binary file in sparse format
+ * fetch differential for loaded knot (at datapos), write to file
  */
-get_sparse_differential(datapos,i,j) = {
+write_differential_to_file(crossings, index, datapos, x, y) = {
 
-	/*
-		local(entry, row, col, val);
-	*/
-
-	i = i2m(datapos, i);
-	j = j2m(datapos, j);
-
+	local(entry, row, col, val, i, j);
+		
 	/*
 		TODO: fix convention; add negatives
 	*/
-	write(Str("sparse_d_",datapos,"_",i,"_",j), allmatr[datapos][i, j]);
+
+	i = i2m(datapos, x);
+	j = j2m(datapos, y);
+
+	if (length(allmatr[datapos][i,j]) > 0,
+		write (
+			Str("./differentials/knot_",crossings,"_",index,"__d_",x,"_",y),
+			allmatr[datapos][i,j]
+		),
+		return 0;
+	);
 
 	/*
 		for (pos = 1, allmatr_length[datapos][i, j],
@@ -77,3 +80,25 @@ get_sparse_differential(datapos,i,j) = {
 	return 1;
 }
 
+/**
+ * compute all differentials of specified knot and write to file
+ */
+compute_knot_differential(crossings, index) = {
+	
+	local(x,y);
+
+	KTable(crossings, index, 1);
+	assignDmatrices(1);
+
+	for (x = DStore[1].iLow,
+		DStore[1].iHigh - 1,
+		for (y = DStore[1].jLow,
+			DStore[1].jHigh,
+
+			write_differential_to_file(crossings, index, 1, x, y);
+
+		);
+	);
+
+	return 1;
+}
