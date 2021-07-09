@@ -56,7 +56,7 @@ write_differential_to_file(crossings, index, datapos, x, y) = {
 
 	if (length(allmatr[datapos][i,j]) > 0,
 		write (
-			Str("./differentials/knot_",crossings,"_",index,"__d_",x,"_",y),
+			Str("./differentials/knot_",crossings,"_",index,"/",knot,"_",crossings,"_",index,"__d_",x,"_",y),
 			allmatr[datapos][i,j]
 		),
 		return 0;
