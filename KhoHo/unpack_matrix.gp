@@ -98,3 +98,23 @@ compute_knot_differential(crossings, index) = {
 
 	return 1;
 }
+
+compute_pd_code_differential(pd_code, crossings, index) = {
+
+	local(datapos, x, y);
+	datapos = init_diagr(pd_code, "a");
+
+	assignDmatrices(datapos);
+
+	for (x = DStore[datapos].iLow,
+		DStore[datapos].iHigh - 1,
+		for (y = DStore[datapos].jLow,
+			DStore[datapos].jHigh,
+
+			write_differential_to_file(crossings, index, datapos, x, y);
+
+		);
+	);
+
+	return 1;
+}

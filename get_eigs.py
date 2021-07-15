@@ -122,9 +122,7 @@ def get_knot_eigs(dir, crossings, index):
 
         else:
             laplacian = d_i.transpose() * d_i    
-            laplacians[(i,j)] = laplacian
-
-            
+            laplacians[(i,j)] = laplacian            
 
         # @TODO: save laplacian sparsity
         
