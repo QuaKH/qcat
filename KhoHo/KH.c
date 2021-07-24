@@ -1,5 +1,5 @@
 /*-*- compile-command: "cc -c -o ./KH.o -g -O3 -Wall -fomit-frame-pointer -fno-strict-aliasing -fPIC -I"/usr/include/x86_64-linux-gnu" ./KH.c && cc -o ./KH.so -shared -g -O3 -Wall -fomit-frame-pointer -fno-strict-aliasing -fPIC -Wl,-shared -Wl,-z,relro ./KH.o -lc -lm -L/usr/lib/x86_64-linux-gnu -lpari"; -*-*/
-#include <pari/pari.h>
+#include "Pari64-2-13-2/include/pari/pari.h"
 /*
 GP;install("init_KH","v","init_KH","././KH.so");
 */
