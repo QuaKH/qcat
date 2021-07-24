@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
+# In[67]:
 
 
 import numpy as np
@@ -9,25 +9,27 @@ import scipy
 import scipy.sparse
 import scipy.sparse.linalg
 import glob
-import sys
+import threading
+import queue
+import pathlib
 
 
-# In[10]:
+# In[61]:
 
 
-def file_to_differential(path):
-    vec = ""
-    shape = ""
+def read_differential_from_file(path):
+    vec = None
+    shape = None
     with open(path, 'r') as reader:
         s = reader.readline().split(" ")
         shape = (int(s[0]), int(s[1]))
-
         vec = reader.readline()[10:-3]
     
     rows = []
     cols = []
     vals = []
     
+    # bitmask to read rows and cols from Pari/GP sparse format
     bitmask = np.int64(2**32)
     
     for elem in vec.split(", "):
@@ -39,51 +41,58 @@ def file_to_differential(path):
     return (vals, (rows, cols)), shape
 
 
-# In[19]:
-
-
+# In[4]:
 
 
 def get_lap_eigs(laplacian):
-    # get smallest eigenpair
-
-    eig_val_small = -1
-    # if laplacian.det() != 0: # @TODO: somehow decide if this laplacian is nonsingular
-    # eig_val_small, eig_vec_small = scipy.sparse.linalg.eigsh(laplacian, k=1, sigma=0, maxiter=1000)
-    eig_vals = scipy.linalg.eigh(laplacian.toarray(), eigvals_only=True)
-    
-    # get only largest eigenvalue using sparse matrix
-    # eig_val_big, eig_vec_big = scipy.sparse.linalg.eigsh(laplacian, k=1, maxiter=1000)
-
-    # return (eig_val_small, eig_val_big)
-    return eig_vals
+    return scipy.linalg.eigh(laplacian.toarray(), eigvals_only=True)
 
 
-
-# In[14]:
+# In[5]:
 
 
 def read_differential_files(dir):
     files = glob.glob(dir + "/*")
 
-    dict = {}
+    d = {}
 
     for file in files:
         data = file.split("_")
         i = int(data[-2])
         j = int(data[-1])
         
-        dict[(i,j)] = file
+        d[(i,j)] = file
     
-    return dict
+    return d
 
 
-# In[21]:
+# In[56]:
+
+
+# compute the dimension of the homology indicates the number of eigenvalues of laplacian
+# that are exactly zero
+# pass None for differential if zero matrix
+def get_num_zero_eigs(d_i_minus_1, d_i):
+    img_dim = 0
+    ker_dim = 0
+    if (d_i != None):
+        img_dim = np.linalg.matrix_rank(d_i.toarray())
+        ker_dim = d_i.shape[1]
+
+    if (d_i_minus_1 != None):
+        ker_dim = d_i_minus_1.shape[0] - np.linalg.matrix_rank(d_i_minus_1.toarray())
+    
+    return ker_dim - img_dim
+
+# get_num_zero_eigs(get_diff_matrix("./KhoHo/differentials/knot_6_1/knot_6_1__d_-1_1"), get_diff_matrix("./KhoHo/differentials/knot_6_1/knot_6_1__d_0_1"))
+
+
+# In[62]:
 
 
 
 def get_diff_matrix(path):
-    (vals, (rows, cols)), s = file_to_differential(path)
+    (vals, (rows, cols)), s = read_differential_from_file(path)
     return scipy.sparse.coo_matrix((vals, (rows, cols)), shape=s).asfptype()
 
 def write_laplacian_sparsity(laplacian, crossings, index, i, j):
@@ -92,68 +101,91 @@ def write_laplacian_sparsity(laplacian, crossings, index, i, j):
     with open("./laplacian_sparsity/knot_" + str(crossings) + "_" + str(index) + "_laspa", "a+") as writer:
         writer.write(str(i) + " " + str(j) + " " + str(laplacian.nnz) + " " + str(laplacian.shape[0]) + "\n")
 
-
-def get_knot_eigs(dir, crossings, index):
-
-    # @TODO: pass crossings and index to read_differential instead of parsing
-    dict = read_differential_files(dir)
-    keys = dict.keys()
-
+def get_laplacian_dict(differential_dict):
+    keys = differential_dict.keys()
     laplacians = {}
 
     for (i, j) in sorted(keys, reverse=True):
+        d_i = get_diff_matrix(differential_dict[(i,j)])
 
-        d_i = get_diff_matrix(dict[(i,j)])
-
-        laplacian = 0
         if (i-1,j) in keys:
-            d_i_minus_1 = get_diff_matrix(dict[(i-1,j)])
-
-            # print(d_i_minus_1.get_shape(), d_i.get_shape())
-            # print("i="+str(i)+" j="+str(j))
-
+            d_i_minus_1 = get_diff_matrix(differential_dict[(i-1,j)])
             laplacian = (d_i_minus_1 * d_i_minus_1.transpose()) + (d_i.transpose() * d_i)         
-
-            # if(d_i_minus_1.get_shape()[0] != d_i.get_shape()[1]):
-            #     print(d_i_minus_1.get_shape())
-            #     break
-
-            laplacians[(i,j)] = laplacian
-
+            laplacians[(i,j)] = (laplacian, get_num_zero_eigs(d_i_minus_1, d_i))
         else:
             laplacian = d_i.transpose() * d_i    
-            laplacians[(i,j)] = laplacian            
-
-        # @TODO: save laplacian sparsity
+            laplacians[(i,j)] = (laplacian, get_num_zero_eigs(None, d_i))
         
         if (i+1,j) not in laplacians:
             laplacian = d_i * d_i.transpose()
-            laplacians[i+1,j] = laplacian
+            laplacians[i+1,j] = (laplacian, get_num_zero_eigs(d_i, None))
+    
+    return laplacians
+
+def get_knot_eigs(dir, crossings, index):
+    differential_dict = read_differential_files(dir)
+    laplacians = get_laplacian_dict(differential_dict)
     
     with open("./eigs/knot_" + str(crossings) + "_" + str(index) + "_eigs", "w+") as writer:
         for (i,j) in laplacians.keys():
-            write_laplacian_sparsity(laplacians[(i,j)], crossings, index, i, j)
+            # record sparsity of laplacian
+            write_laplacian_sparsity(laplacians[(i,j)][0], crossings, index, i, j)
 
-            if laplacians[(i,j)].shape == (1,1):
-                continue
-
-            # eig_small, eig_large = get_eigs(laplacians[(i,j)])
-            eig_vals = get_lap_eigs(laplacians[(i,j)])
+            # get eigenvalues of laplacian
+            eig_vals = get_lap_eigs(laplacians[(i,j)][0])
 
             # write eigenvalues to file
-            output_line = str(i) + " " + str(j) + " "
+            output_line = str(i) + " " + str(j) + " " + str(laplacians[(i,j)][1]) + " "
             writer.write(output_line)
             for e in eig_vals:
                 writer.write(str(e) + " ")
             writer.write("\n")
 
-get_knot_eigs("./KhoHo/differentials/knot_5_1/", 5, 1)
+# get_knot_eigs("./KhoHo/differentials/knot_7_1/", 7, 1)
 
 
 # In[ ]:
 
 
+q = queue.Queue()
 
+def worker():
+    while (True):
+        task = q.get()
+        # print("working on " + str(task["crossings"]) + "_" + str(task["index"]))
+        get_knot_eigs(task["path"], task["crossings"], task["index"])
+        
+        q.task_done()
+
+def run_prague():
+    MAX_THREAD_NUM = 5
+    threads = [threading.Thread(target=worker, daemon=True).start() for i in range(MAX_THREAD_NUM)]
+
+    index_count = [1, 1, 2, 3, 7, 21, 49, 165]
+    for crossings in range(3,11):
+        for index in range(1,index_count[crossings - 3] + 1):
+            path = "./KhoHo/differentials/knot_" + str(crossings) + "_" + str(index)
+            dir = pathlib.Path(path)
+            
+            if dir.is_dir():
+                q.put({"path":path, "crossings": crossings, "index": index})
+
+    q.join()
+
+
+run_prague()
+
+
+# In[ ]:
+
+
+def get_file_name(crossings, index, type):
+    if type == "differential":
+        return "knot_" + str(crossings) + "_" + str(index)
+    if type == "eig":
+        return "knot_" + str(crossings) + "_" + str(index) + "_eigs"
+    if type == "laplacian":
+        return "knot_" + str(crossings) + "_" + str(index) + "_laspa"
 
 
 # In[ ]:
