@@ -29,7 +29,11 @@
 
 #include <stdlib.h>
 #include <limits.h>
+<<<<<<< Updated upstream
 #include "Pari64-2-13-2/include/pari/pari.h"
+=======
+#include "pari/src/headers/pari.h"
+>>>>>>> Stashed changes
 
 #if PARI_VERSION_CODE > PARI_VERSION(2,7,0)
 #  define talker e_MISC

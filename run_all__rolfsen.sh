@@ -26,7 +26,7 @@ python3 parse_pd_code.py "./pd_code_input.txt"
 
 # compute all knot differentials
 cd KhoHo
-echo "$(cat ../gp_out)" | gp -f -q -s 120000000 KH unpack_matrix.gp
+echo "$(cat ../gp_out)" | pari/gp -f -q -s 120000000 KH unpack_matrix.gp
 
 # head -166 gp_out > gp_out_head
 # head -83 gp_out_head > gp_out1
@@ -37,7 +37,7 @@ echo "$(cat ../gp_out)" | gp -f -q -s 120000000 KH unpack_matrix.gp
 # echo "$(cat ../gp_out2)" | gp -f -q -s 120000000 KH unpack_matrix.gp
 # echo "$(cat ../gp_out3)" | gp -f -q -s 120000000 KH unpack_matrix.gp
 
-# parallel --jobs 6 gp -f -q -s 120000000 KH unpack_matrix.gp :::: gp_out
+# parallel --jobs 6 pari/gp -f -q -s 120000000 KH unpack_matrix.gp :::: gp_out
 
 echo "finished parallel part"
 cd ..

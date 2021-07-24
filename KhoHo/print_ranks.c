@@ -33,7 +33,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
+<<<<<<< Updated upstream
 #include "Pari64-2-13-2/include/pari/pari.h"
+=======
+#include "pari/src/headers/pari.h"
+>>>>>>> Stashed changes
 
 #ifdef min
 #  undef min

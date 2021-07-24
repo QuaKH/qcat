@@ -26,8 +26,8 @@ while read p; do
 
     echo Computing differentials...
     cd KhoHo
-    # { time echo "$p" | gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage; } 2>> ../run_all__pd_codes_TIMES
-    /usr/bin/time -o ../run_all__pd_codes_TIMES -a echo "$p" | gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage;
+    # { time echo "$p" | pari/gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage; } 2>> ../run_all__pd_codes_TIMES
+    /usr/bin/time -o ../run_all__pd_codes_TIMES -a echo "$p" | pari/gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage;
     cd ..
 
     echo "EIGENVALUES:" >> run_all__pd_codes_TIMES

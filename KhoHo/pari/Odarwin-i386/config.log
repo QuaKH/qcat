@@ -1,0 +1,36 @@
+This file contains messages produced while configuring
+  pari-2.13.1 
+to aid debugging if Configure makes a mistake. Command line was
+  > ./Configure 
+
+/usr/bin/gcc -Wl,-search_paths_first -o darwin-i386-ansi1627 ansi.c
+/usr/bin/gcc -Wl,-search_paths_first -o darwin-i386-gnu1627 gnu.c
+/usr/bin/gcc -Wl,-search_paths_first -fno-strict-aliasing -o darwin-i386-gnu1627 gnu.c
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer -Wl,-search_paths_first endian.c -o darwin-i386-endian1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_exp2.c -o darwin-i386-tmp1627 -lm
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_log2.c -o darwin-i386-tmp1627 -lm
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_strftime.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_getrusage.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_gettimeofday.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_sigaction.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_TIOCGWINSZ.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_getrlimit.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_stat.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_vsnprintf.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_mmap.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_waitpid.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_setsid.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_getenv.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_isatty.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_alarm.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_system.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer has_dlopen.c -o darwin-i386-tmp1627
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer -Wl,-search_paths_first -o darwin-i386-gmp1627 gmp_version.c -lgmp
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer -Wl,-search_paths_first -o darwin-i386-gmp1627 gmp_mismatch.c -lgmp
+xmkmf
+../log_cmd: line 2: xmkmf: command not found
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer -Wl,-search_paths_first -I/usr/X11R6/include -o darwin-i386-X111627 has_X11.c -lX11
+ld: library not found for -lX11
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer -Wl,-search_paths_first -I/usr/X11R6/include -o darwin-i386-X111627 has_X11.c -L/usr/X11R6/lib -lX11
+/usr/bin/gcc -O3 -Wall -fno-strict-aliasing -fomit-frame-pointer -Wl,-search_paths_first -o darwin-i386-rlv1627 rl_version.c -lreadline
