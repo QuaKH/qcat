@@ -33,7 +33,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
-#include <pari/pari.h>
+#include "Pari64-2-13-2/include/pari/pari.h"
 
 #ifdef min
 #  undef min

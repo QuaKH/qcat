@@ -102,7 +102,8 @@ compute_knot_differential(crossings, index) = {
 compute_pd_code_differential(pd_code, crossings, index) = {
 
 	local(datapos, x, y);
-	datapos = init_diagr(pd_code, "a");
+	/* add matrix of 1s to pd_code to convert to 1-indexing */
+	datapos = init_diagr(pd_code + matrix(crossings,4,i,j,1), "a");
 
 	assignDmatrices(datapos);
 

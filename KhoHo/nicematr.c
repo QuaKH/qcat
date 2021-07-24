@@ -25,7 +25,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <pari/pari.h>
+#include "Pari64-2-13-2/include/pari/pari.h"
 
 #if PARI_VERSION_CODE > PARI_VERSION(2,7,0)
 #  define talker e_MISC
