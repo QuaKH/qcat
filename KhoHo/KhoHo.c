@@ -1,5 +1,5 @@
 /*-*- compile-command: "cc -c -o ./KhoHo.o -g -O3 -Wall -fomit-frame-pointer -fno-strict-aliasing -fPIC -I"/usr/include/x86_64-linux-gnu" ./KhoHo.c && cc -o ./KhoHo.so -shared -g -O3 -Wall -fomit-frame-pointer -fno-strict-aliasing -fPIC -Wl,-shared -Wl,-z,relro ./KhoHo.o -lc -lm -L/usr/lib/x86_64-linux-gnu -lpari"; -*-*/
-#include <pari/pari.h>
+#include "Pari64-2-13-2/include/pari/pari.h"
 /*
 GP;install("init_KhoHo","v","init_KhoHo","././KhoHo.so");
 GP;install("T_ranks_assign","vD0,G,D0,G,","T_ranks_assign","././KhoHo.so");
