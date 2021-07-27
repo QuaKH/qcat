@@ -27,13 +27,13 @@ while read p; do
     echo Computing differentials...
     cd KhoHo
     # { time echo "$p" | gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage; } 2>> ../run_all__pd_codes_TIMES
-    /usr/bin/time -o ../run_all__pd_codes_TIMES -a echo "$p" | gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage;
+    echo "$p" | /usr/bin/time -o ../run_all__pd_codes_TIMES -a --format='%Uuser %Ssystem %Eelapsed %PCPU %MmaxKB %tavgKB %Wswaps %ccontext_switch %wwaits' gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage;
     cd ..
 
     echo "EIGENVALUES:" >> run_all__pd_codes_TIMES
 
     echo Getting eigenvalues...
-    /usr/bin/time -o run_all__pd_codes_TIMES -a python3 get_eigs.py ${dir} ${crossings} ${index}
+    /usr/bin/time -o run_all__pd_codes_TIMES -a --format='%Uuser %Ssystem %Eelapsed %PCPU %MmaxKB %tavgKB %Wswaps %ccontext_switch %wwaits' python3 get_eigs.py ${dir} ${crossings} ${index}
 
     echo Deleting differentials...
     rm -r $dir

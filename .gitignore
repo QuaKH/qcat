@@ -55,4 +55,4 @@ dkms.conf
 ./KhoHo/differentials/*
 ./eigs/*
 ./laplacian_sparsity/*
-./KhoHo/Pari64-2-13-2/*
+./KhoHo/Pari64-2-13-2
