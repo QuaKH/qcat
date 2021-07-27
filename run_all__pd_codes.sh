@@ -43,5 +43,5 @@ while read p; do
 done < gp_pd_code_input
 
 # clean up
-rm gp_pd_code_input
+# rm gp_pd_code_input
 rm garbage
