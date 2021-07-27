@@ -1,16 +1,4 @@
-KNOT 3 0
+KNOT 12 0
 DIFFERENTIALS:
-0.00user 0.00system 0:00.02elapsed 0%CPU (0avgtext+0avgdata 804maxresident)k
-0inputs+0outputs (0major+232minor)pagefaults 0swaps
+3.15user 0.35system 0:05.11elapsed 68%CPU 14880maxKB 0avgKB 0swaps 0context_switch 0waits
 EIGENVALUES:
-1.03user 1.68system 0:02.47elapsed 109%CPU (0avgtext+0avgdata 34800maxresident)k
-0inputs+0outputs (0major+9494minor)pagefaults 0swaps
-
-KNOT 3 1
-DIFFERENTIALS:
-0.00user 0.00system 0:00.02elapsed 0%CPU (0avgtext+0avgdata 804maxresident)k
-0inputs+0outputs (0major+230minor)pagefaults 0swaps
-EIGENVALUES:
-0.85user 1.56system 0:00.65elapsed 369%CPU (0avgtext+0avgdata 34888maxresident)k
-0inputs+0outputs (0major+9545minor)pagefaults 0swaps
-
