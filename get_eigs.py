@@ -12,6 +12,7 @@ import glob
 import threading
 import queue
 import pathlib
+import psutil
 
 
 # In[61]:
@@ -158,7 +159,7 @@ def worker():
         q.task_done()
 
 def run_prague():
-    MAX_THREAD_NUM = 5
+    MAX_THREAD_NUM = psutil.cpu_count()
     threads = [threading.Thread(target=worker, daemon=True).start() for i in range(MAX_THREAD_NUM)]
 
     index_count = [1, 1, 2, 3, 7, 21, 49, 165]
