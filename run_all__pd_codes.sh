@@ -27,7 +27,7 @@ while read p; do
     echo Computing differentials...
     cd KhoHo
     # { time echo "$p" | gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage; } 2>> ../run_all__pd_codes_TIMES
-    echo "$p" | /usr/bin/time -o ../run_all__pd_codes_TIMES -a --format='%Uuser %Ssystem %Eelapsed %PCPU %MmaxKB %tavgKB %Wswaps %ccontext_switch %wwaits' gp -f -q -s 1000000000 KH unpack_matrix.gp > ../garbage;
+    echo "$p" | /usr/bin/time -o ../run_all__pd_codes_TIMES -a --format='%Uuser %Ssystem %Eelapsed %PCPU %MmaxKB %tavgKB %Wswaps %ccontext_switch %wwaits' gp -f -q -s 1000000000 KH unpack_matrix.gp > /dev/null;
     cd ..
 
     echo "EIGENVALUES:" >> run_all__pd_codes_TIMES
@@ -44,4 +44,3 @@ done < gp_pd_code_input
 
 # clean up
 rm gp_pd_code_input
-rm garbage

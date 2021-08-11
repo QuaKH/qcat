@@ -45,8 +45,10 @@ def read_differential_from_file(path):
 # In[4]:
 
 
-def get_lap_eigs(laplacian):
-    return scipy.linalg.eigh(laplacian.toarray(), eigvals_only=True)
+def get_lap_eigs(laplacian, num_zero_eigs):
+    smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvalues=False, k=num_zero_eigs + 1, tol=10e-5)[0]
+    largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvalues=False, k=1, tol=10e-5)[0]
+    return smallest, largest
 
 
 # In[5]:
@@ -133,13 +135,11 @@ def get_knot_eigs(dir, crossings, index):
             write_laplacian_sparsity(laplacians[(i,j)][0], crossings, index, i, j)
 
             # get eigenvalues of laplacian
-            eig_vals = get_lap_eigs(laplacians[(i,j)][0])
+            smallest, largest = get_lap_eigs(laplacians[(i,j)][0], laplacians[(i,j)][1])
 
             # write eigenvalues to file
-            output_line = str(i) + " " + str(j) + " " + str(laplacians[(i,j)][1]) + " "
+            output_line = str(i) + " " + str(j) + " " + str(smallest) + " " + str(largest)
             writer.write(output_line)
-            for e in eig_vals:
-                writer.write(str(e) + " ")
             writer.write("\n")
 
 # get_knot_eigs("./KhoHo/differentials/knot_7_1/", 7, 1)
