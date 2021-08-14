@@ -13,7 +13,7 @@ import threading
 import queue
 import pathlib
 import psutil
-
+import torch
 
 # In[61]:
 
@@ -46,8 +46,20 @@ def read_differential_from_file(path):
 
 
 def get_lap_eigs(laplacian, num_zero_eigs):
-    smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvalues=False, k=num_zero_eigs + 1, tol=10e-5)[0]
-    largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvalues=False, k=1, tol=10e-5)[0]
+    smallest, largest = None, None
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+
+        i = torch.LongTensor(np.vstack((laplacian.row, laplacian.col)))
+        v = torch.FloatTensor(laplacian.data)
+        matrix = torch.sparse.FloatTensor(i, v, torch.Size(laplacian.shape))
+
+        eigs = torch.linalg.eigvals(matrix)
+        eigs_list = np.sort(eigs.numpy())
+        return eigs_list[num_zero_eigs], eigs_list[-1]
+    else:
+        smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvalues=False, k=num_zero_eigs + 1, tol=10e-5)[0]
+        largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvalues=False, k=1, tol=10e-5)[0]
     return smallest, largest
 
 
