@@ -53,9 +53,11 @@ def get_lap_eigs(laplacian, num_zero_eigs):
         i = torch.LongTensor(np.vstack((laplacian.row, laplacian.col)))
         v = torch.FloatTensor(laplacian.data)
         matrix = torch.sparse.FloatTensor(i, v, torch.Size(laplacian.shape))
+        matrix.to(device)
 
         eigs = torch.linalg.eigvals(matrix)
         eigs_list = np.sort(eigs.numpy())
+        
         return eigs_list[num_zero_eigs], eigs_list[-1]
     else:
         smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvalues=False, k=num_zero_eigs + 1, tol=10e-5)[0]
