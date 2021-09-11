@@ -46,8 +46,18 @@ def read_differential_from_file(path):
 
 
 def get_lap_eigs(laplacian, num_zero_eigs):
-    smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvalues=False, k=num_zero_eigs + 1, tol=10e-5)[0]
-    largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvalues=False, k=1, tol=10e-5)[0]
+    if laplacian.shape[0] == 1:
+        val = laplacian.toarray()[0][0]
+        return val, val
+
+    largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvectors=False, k=1, tol=10e-5)[0]
+    
+    # Only one nonzero eigenvalue
+    if num_zero_eigs == laplacian.shape[0] - 1:
+        return largest, largest
+    
+    smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvectors=False, k=num_zero_eigs + 1, tol=10e-5)[0]
+
     return smallest, largest
 
 
@@ -138,7 +148,7 @@ def get_knot_eigs(dir, crossings, index):
             smallest, largest = get_lap_eigs(laplacians[(i,j)][0], laplacians[(i,j)][1])
 
             # write eigenvalues to file
-            output_line = str(i) + " " + str(j) + " " + str(smallest) + " " + str(largest)
+            output_line = str(i) + " " + str(j) + " " + str(laplacians[(i,j)][1]) + " " + str(smallest) + " " + str(largest)
             writer.write(output_line)
             writer.write("\n")
 
