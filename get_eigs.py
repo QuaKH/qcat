@@ -12,7 +12,6 @@ import glob
 import threading
 import queue
 import pathlib
-import psutil
 
 
 # In[61]:
@@ -46,9 +45,10 @@ def read_differential_from_file(path):
 
 
 def get_lap_eigs(laplacian, num_zero_eigs):
-    smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvalues=False, k=num_zero_eigs + 1, tol=10e-5)[0]
-    largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvalues=False, k=1, tol=10e-5)[0]
-    return smallest, largest
+    largest_eig = scipy.sparse.linalg.eigh(laplacian, k=1, return_eigenvectors=False)
+    smallest_eig = scipy.sparse.linalg.eigh(laplacian, k=num_zero_eigs+1, sigma=0, return_eigenvectors=False)[-1]
+
+    return smallest_eig, largest_eig
 
 
 # In[5]:
@@ -135,11 +135,13 @@ def get_knot_eigs(dir, crossings, index):
             write_laplacian_sparsity(laplacians[(i,j)][0], crossings, index, i, j)
 
             # get eigenvalues of laplacian
-            smallest, largest = get_lap_eigs(laplacians[(i,j)][0], laplacians[(i,j)][1])
+            eig_vals = get_lap_eigs(laplacians[(i,j)][0], laplacians[(i,j)][1])
 
             # write eigenvalues to file
-            output_line = str(i) + " " + str(j) + " " + str(smallest) + " " + str(largest)
+            output_line = str(i) + " " + str(j) + " " + str(laplacians[(i,j)][1]) + " "
             writer.write(output_line)
+            for e in eig_vals:
+                writer.write(str(e) + " ")
             writer.write("\n")
 
 # get_knot_eigs("./KhoHo/differentials/knot_7_1/", 7, 1)
@@ -159,7 +161,7 @@ def worker():
         q.task_done()
 
 def run_prague():
-    MAX_THREAD_NUM = psutil.cpu_count()
+    MAX_THREAD_NUM = 5
     threads = [threading.Thread(target=worker, daemon=True).start() for i in range(MAX_THREAD_NUM)]
 
     index_count = [1, 1, 2, 3, 7, 21, 49, 165]
