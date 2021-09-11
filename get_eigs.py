@@ -45,8 +45,26 @@ def read_differential_from_file(path):
 
 
 def get_lap_eigs(laplacian, num_zero_eigs):
-    largest_eig = scipy.sparse.linalg.eigh(laplacian, k=1, return_eigenvectors=False)
-    smallest_eig = scipy.sparse.linalg.eigh(laplacian, k=num_zero_eigs+1, sigma=0, return_eigenvectors=False)[-1]
+    # if all eigs are 0
+    if (num_zero_eigs == laplacian.shape[0]):
+        return 0, 0
+
+    # if laplacian is 1x1
+    if (laplacian.shape[0] == 1):
+        return laplacian[0,0], laplacian[0,0]
+
+    largest_eig = scipy.sparse.linalg.eigsh(laplacian, k=1, return_eigenvectors=False)
+    
+    # if there is only 1 non-zero eig
+    if (num_zero_eigs == laplacian.shape[0] - 1):
+        return largest_eig, largest_eig
+    
+    smallest_eig = -1
+    try:
+        smallest_eig = scipy.sparse.linalg.eigsh(laplacian, k=num_zero_eigs+1, sigma=0, return_eigenvectors=False)[-1]
+    except RuntimeError as e:
+        # if laplacian was not invertible
+        print("Laplacian was singular")
 
     return smallest_eig, largest_eig
 
