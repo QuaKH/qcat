@@ -8,6 +8,11 @@ rm -r KhoHo/differentials/*
 rm -r eigs/*
 rm -r laplacian_sparsity/*
 
+# replace directories
+mkdir KhoHo/differentials
+mkdir eigs
+mkdir laplacian_sparsity
+
 echo "compiling notebooks"
 ./compile_nb.sh
 

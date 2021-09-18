@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[67]:
+# In[1]:
 
 
 import numpy as np
@@ -14,7 +14,7 @@ import queue
 import pathlib
 
 
-# In[61]:
+# In[6]:
 
 
 def read_differential_from_file(path):
@@ -45,10 +45,19 @@ def read_differential_from_file(path):
 
 
 def get_lap_eigs(laplacian, num_zero_eigs):
-    largest_eig = scipy.sparse.linalg.eigh(laplacian, k=1, return_eigenvectors=False)
-    smallest_eig = scipy.sparse.linalg.eigh(laplacian, k=num_zero_eigs+1, sigma=0, return_eigenvectors=False)[-1]
+    if laplacian.shape[0] == 1:
+        val = laplacian.toarray()[0][0]
+        return val, val
 
-    return smallest_eig, largest_eig
+    largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvectors=False, k=1, tol=10e-5)[0]
+    
+    # Only one nonzero eigenvalue
+    if num_zero_eigs == laplacian.shape[0] - 1:
+        return largest, largest
+    
+    smallest = scipy.sparse.linalg.eigsh(laplacian, which="SM", return_eigenvectors=False, k=num_zero_eigs + 1, tol=10e-5)[0]
+
+    return smallest, largest
 
 
 # In[5]:

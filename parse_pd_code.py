@@ -16,7 +16,7 @@
 # parse_pd_code("./pd_code_input.txt")
 
 
-# In[1]:
+# In[3]:
 
 
 def parse_pd_code(path):
@@ -28,10 +28,10 @@ def parse_pd_code(path):
             print("compute_pd_code_differential(" + pd_code[:-1] + ", " + parts[0] + ", " + parts[1] + ")")
 
 
-# In[2]:
+# In[4]:
 
 
-# parse_pd_code("snappy_out_links_4_to_12.txt")
+parse_pd_code("pd_code_files/reidemeister_on_3_crossing")
 
 
 # In[ ]:
