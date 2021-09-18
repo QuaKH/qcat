@@ -6,6 +6,6 @@
 #SBATCH --mem-per-cpu=10000
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-type=END
-#SBATCH --mail-user=sdontha2@illinois.edu
+#SBATCH --mail-user=jayr2@illinois.edu
  
-bash run_all__pd_codes.sh snappy_out_12_to_20.txt
+bash run_all__pd_codes.sh pd_code_files/reidemeister_on_3_crossing
