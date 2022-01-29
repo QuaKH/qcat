@@ -9,4 +9,4 @@ def generate_random_braid_closure(strands, height):
 for strands in range(3,6):
     for height in range(1,12):
         for i in range(300):
-            print(generate_random_braid_closure(strands, height).PD_code())
+            print(str(height) + ";" + str(i) + ";" + str(generate_random_braid_closure(strands, height).PD_code()))
