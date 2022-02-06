@@ -14,7 +14,7 @@ mkdir eigs
 mkdir laplacian_sparsity
 
 echo "compiling notebooks"
-./compile_nb.sh
+# ./compile_nb.sh
 
 # parse pd code input file and write output gp commands to file
 python3 parse_pd_code.py $1 > gp_pd_code_input
