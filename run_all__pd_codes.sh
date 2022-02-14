@@ -13,16 +13,17 @@ mkdir KhoHo/differentials
 mkdir eigs
 mkdir laplacian_sparsity
 
-echo "compiling notebooks"
+# echo "compiling notebooks"
 # ./compile_nb.sh
 
 # parse pd code input file and write output gp commands to file
 python3 parse_pd_code.py $1 > gp_pd_code_input
 
 # iterate through each command in the file; time each separately
-index=0
+# index=0
 while read p; do
     crossings=(`echo $p | grep -Po '], \K[^,]*'`)
+    index=(`echo $p | grep -Po '], \d+, \K[^)]*'`)
     dir="KhoHo/differentials/knot_${crossings}_${index}"
     mkdir $dir
 
@@ -44,7 +45,7 @@ while read p; do
     rm -r $dir
 
     printf "\n" >> run_all__pd_codes_TIMES
-    index=$(($index + 1))
+    # index=$(($index + 1))
 done < gp_pd_code_input
 
 # clean up
