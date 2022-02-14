@@ -31,7 +31,7 @@ def parse_pd_code(path):
 # In[4]:
 
 
-parse_pd_code("pd_code_files/reidemeister_on_3_crossing")
+# parse_pd_code("pd_code_files/reidemeister_on_3_crossing")
 
 
 # In[ ]:
