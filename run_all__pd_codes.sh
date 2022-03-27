@@ -1,7 +1,9 @@
 # Arguments:
 # 1: pd code input file path
+# 2: file path of database to push output data to
+# 3: name of table in database
 
-echo "cleaning up"
+echo "Cleaning up..."
 rm gp_pd_code_input
 rm run_all__pd_codes_TIMES
 rm -r KhoHo/differentials/*
@@ -24,6 +26,7 @@ python3 parse_pd_code.py $1 > gp_pd_code_input
 while read p; do
     crossings=(`echo $p | grep -Po '], \K[^,]*'`)
     index=(`echo $p | grep -Po '], \d+, \K[^)]*'`)
+    pd_code=(`echo $p | grep '(?<=[).*(?=])'`) # selects everything between [ and ]
     dir="KhoHo/differentials/knot_${crossings}_${index}"
     mkdir $dir
 
@@ -39,7 +42,7 @@ while read p; do
     echo "EIGENVALUES:" >> run_all__pd_codes_TIMES
 
     echo Getting eigenvalues...
-    /usr/bin/time -o run_all__pd_codes_TIMES -a --format='%Uuser %Ssystem %Eelapsed %PCPU %MmaxKB %tavgKB %Wswaps %ccontext_switch %wwaits' python3 get_eigs.py ${dir} ${crossings} ${index}
+    /usr/bin/time -o run_all__pd_codes_TIMES -a --format='%Uuser %Ssystem %Eelapsed %PCPU %MmaxKB %tavgKB %Wswaps %ccontext_switch %wwaits' python3 get_eigs.py ${dir} ${pd_code} ${crossings} $2 $3
 
     echo Deleting differentials...
     rm -r $dir
