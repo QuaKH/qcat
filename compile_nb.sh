@@ -2,7 +2,7 @@
 jupyter nbconvert --to python get_eigs.ipynb
 echo "if __name__ == \"__main__\":
     import sys
-    get_knot_eigs(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))" >> get_eigs.py
+    get_knot_eigs(sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4], sys.argv[5])" >> get_eigs.py
 
 # compile parse_pd_code notebook
 jupyter nbconvert --to python parse_pd_code.ipynb

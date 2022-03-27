@@ -53,6 +53,10 @@ dkms.conf
 
 # directories
 ./KhoHo/differentials/*
-./eigs*/*
-./laplacian_sparsity*/*
+knot_*_eigs
+./eigs/*
+./eigs4-12/*
+./laplacian_sparsity/*
+./laplacian_sparsity4-12/*
 ./KhoHo/Pari64-2-13-2
+./slurm*
