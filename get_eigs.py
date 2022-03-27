@@ -74,6 +74,7 @@ def get_lap_eigs(laplacian, num_zero_eigs):
         val = laplacian.toarray()[0][0]
         return val, val
 
+
     largest = scipy.sparse.linalg.eigsh(laplacian, which="LM", return_eigenvectors=False, k=1, tol=10e-5)[0]
     
     # Only one nonzero eigenvalue
@@ -150,6 +151,7 @@ def get_knot_eigs(dir, pd_code, crossings, db_path, db_table_name):
 
     con = sqlite3.connect(db_path)
     cur = con.cursor()
+
 
     for (i,j) in laplacians.keys():
 
