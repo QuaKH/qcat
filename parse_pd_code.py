@@ -16,9 +16,12 @@
 # parse_pd_code("./pd_code_input.txt")
 
 
-# In[3]:
+# In[ ]:
 
 
+# Parses PD codes stored in text file in following format:
+# crossings;idx;[(1,2,3,4),(1,2,3,4),...]
+# Prints out code to run in Pari/GP to compute the differentials for each PD code
 def parse_pd_code(path):
     with open(path, "r") as file:
         lines = file.readlines()
@@ -26,18 +29,6 @@ def parse_pd_code(path):
             parts = line.split(";")
             pd_code = parts[2].replace("),", ";").replace("(","").replace(")","")
             print("compute_pd_code_differential(" + pd_code[:-1] + ", " + parts[0] + ", " + parts[1] + ")")
-
-
-# In[4]:
-
-
-# parse_pd_code("pd_code_files/reidemeister_on_3_crossing")
-
-
-# In[ ]:
-
-
-
 
 if __name__ == "__main__":
     import sys
