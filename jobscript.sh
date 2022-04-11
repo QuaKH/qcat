@@ -8,4 +8,4 @@
 #SBATCH --mail-type=END
 #SBATCH --mail-user=jayr2@illinois.edu
  
-bash run_all__pd_codes.sh random-braid/random_braid_closure_PD_codes_1_to_9
+bash run_all__pd_codes.sh pd_code_files/Rolfsen db/eigs.db `\"Rolfsen-Table\"`
