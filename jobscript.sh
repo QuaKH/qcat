@@ -8,4 +8,4 @@
 #SBATCH --mail-type=END
 #SBATCH --mail-user=jayr2@illinois.edu
  
-bash run_all__pd_codes.sh pd_code_files/Rolfsen db/eigs.db `\"Rolfsen-Table\"`
+bash run_all__pd_codes.sh pd_code_files/pretzel_pd_codes.txt db/eigs.db Pretzel
